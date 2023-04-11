@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace>example</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\GShark\GShark.csproj" />
+
+		<Compile Include="../usings.full.cs" />
+	</ItemGroup>
+
+	<ItemGroup><!-- <PackageReference Include="netcore-opengl-core" Version="2.5.0" />
+		<PackageReference Include="netcore-opengl-render" Version="2.5.0" />
+		<PackageReference Include="netcore-opengl-gui" Version="2.5.0" />
+		<PackageReference Include="netcore-opengl-shapes" Version="2.5.0" /> -->
+	
+		<ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\core\netcore-opengl-core.csproj" />
+
+		<ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\render\netcore-opengl-render.csproj" />
+
+	  <ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\gui\netcore-opengl-gui.csproj" />
+	
+	  <ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\shapes\netcore-opengl-shapes.csproj" />
+	</ItemGroup>
+
+</Project>
