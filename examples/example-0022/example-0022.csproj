@@ -16,6 +16,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="layout.json" CopyToOutputDirectory="PreserveNewest" />    
+	</ItemGroup>
+
+	<ItemGroup>
 
 		<PackageReference Include="netcore-opengl-core" Version="2.5.5" />
 		<PackageReference Include="netcore-opengl-render" Version="2.5.5" />
