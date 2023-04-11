@@ -14,7 +14,13 @@ class Program
     {
         InitAvalonia();
 
-        var w = GLWindow.Create();
+        var w = GLWindow.Create(
+            onFocusedControlChanged: (split, AvaloniaGLControl, isInitial) =>
+            {
+                if (isInitial)
+                    split.LoadViewLayout();
+            }
+        );
 
         w.GLModel.BuildModel = (glCtl, isInitial) =>
         {
@@ -70,7 +76,7 @@ class Program
             var joinFig = sweepNurb.NurbToGL(Color.Red, N: 10);
             glModel.AddFigure(new GLTriangleFigure(joinFig));
 
-glCtl.CameraView(CameraViewType.Top);
+            // glCtl.CameraView(CameraViewType.Top);
             // glCtl.LoadView();
         };
 
