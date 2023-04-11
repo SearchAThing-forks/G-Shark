@@ -15,18 +15,17 @@
 		<Compile Include="../usings.full.cs" />
 	</ItemGroup>
 
-	<ItemGroup><!-- <PackageReference Include="netcore-opengl-core" Version="2.5.0" />
-		<PackageReference Include="netcore-opengl-render" Version="2.5.0" />
-		<PackageReference Include="netcore-opengl-gui" Version="2.5.0" />
-		<PackageReference Include="netcore-opengl-shapes" Version="2.5.0" /> -->
-	
-		<ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\core\netcore-opengl-core.csproj" />
+	<ItemGroup>
 
+		<PackageReference Include="netcore-opengl-core" Version="2.5.5" />
+		<PackageReference Include="netcore-opengl-render" Version="2.5.5" />
+		<PackageReference Include="netcore-opengl-gui" Version="2.5.5" />
+		<PackageReference Include="netcore-opengl-shapes" Version="2.5.5" />
+
+		<!-- <ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\core\netcore-opengl-core.csproj" />
 		<ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\render\netcore-opengl-render.csproj" />
-
-	  <ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\gui\netcore-opengl-gui.csproj" />
-	
-	  <ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\shapes\netcore-opengl-shapes.csproj" />
+		<ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\gui\netcore-opengl-gui.csproj" />
+		<ProjectReference Include="..\..\..\..\..\opensource\netcore-opengl\src\shapes\netcore-opengl-shapes.csproj" /> -->
 	</ItemGroup>
 
 </Project>
