@@ -232,7 +232,7 @@ namespace GShark.Geometry
             Minimizer min = new Minimizer(objectiveFunction);
             var lengthAtPrevious = LengthAt(t);
             var initialGuess = ParameterAtLength(lengthAtPrevious + chordLength);
-            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { initialGuess , initialGuess });
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { initialGuess, initialGuess });
 
             return solution.SolutionPoint[0];
         }
@@ -251,14 +251,14 @@ namespace GShark.Geometry
 
             if (chordLength >= Length)
             {
-                return new List<double>{1.0};
+                return new List<double> { 1.0 };
             }
 
             var t = 0.0;
             var length = 0.0;
             var resultParams = new List<double>();
 
-            while(length + chordLength < Length)
+            while (length + chordLength < Length)
             {
                 var parmAtChordLength = ParameterAtChordLength(t, chordLength);
                 resultParams.Add(parmAtChordLength);
@@ -620,7 +620,10 @@ namespace GShark.Geometry
         public List<Plane> PerpendicularFrames(List<double> uValues)
         {
             var pointsOnCurve = uValues.Select(PointAt).ToList(); //get points at t values
-            var pointsOnCurveTan = uValues.Select(t => Evaluate.Curve.RationalDerivatives(this, t, 1)[1]).ToList(); //get tangents at t values
+            var pointsOnCurveTan = uValues
+                .Select(t => Evaluate.Curve.RationalDerivatives(this, t, 1)[1])
+                .Select(t => t / t.Length) // normalize
+                .ToList(); //get tangents at t values
             var firstParameter = uValues[0]; //get first t value
 
             //Create initial frame at first parameter
