@@ -57,7 +57,10 @@ class Program
 
             // grab tube vertexes near join as profile to sweep
 
-            var profilePts = tube1.Vertexes().Where(r => r.Position.Length() < 2).Select(w => w.Position).ToList();
+            var profilePts = tube1
+                .BuildVertexPosDict(tol: 1e-7f)
+                .Select(w => w.Value.First())
+                .Where(r => r.Position.Length() < 2).Select(w => w.Position).ToList();
             // var profileCenter = profilePts[0];
             var profileCenter = profilePts.Mean();
 
@@ -70,13 +73,25 @@ class Program
                 var alphaStep = (float)(PI / 2 / N);
                 var rotCenter = new Vector3(0, -2f, 0);
                 for (int i = 0; i < N + 1; ++i)
-                {                    
+                {
                     railPts.Add(Vector3.Transform(profileCenter, Matrix4x4.CreateRotationZ(-alpha, rotCenter)));
                     // if (i == 0)
                     //     railPts.Add(Vector3.Transform(profileCenter, Matrix4x4.CreateRotationZ(-alpha - alphaStep/2f, rotCenter)));
 
                     alpha += alphaStep;
                 }
+            }
+
+            for (int i = 0; i < railPts.Count; ++i)
+            {
+                var railPt = railPts[i];
+                System.Console.WriteLine($"rail [{i}]: {railPt}");
+            }
+
+            for (int i = 0; i < profilePts.Count; ++i)
+            {
+                var profilePt = profilePts[i];
+                System.Console.WriteLine($"profile [{i}]: {profilePt}");
             }
 
             var sweepNurb = NurbsSurface.FromSweep(
