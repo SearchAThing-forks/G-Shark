@@ -278,6 +278,7 @@ namespace GShark.Geometry
 
             for (int i = 1; i < frames.Count; i++)
             {
+                
                 var xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
                 curves.Add(((NurbsCurve)curves[0]).Transform(xForm));
             }

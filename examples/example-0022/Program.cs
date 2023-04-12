@@ -2,13 +2,15 @@
 using GShark.Geometry;
 using Plane = GShark.Geometry.Plane;
 
+using SearchAThing.OpenGL.Nurbs;
+
 namespace example;
 
 // example-0022
 // TODO: doc
 
 class Program
-{
+{    
 
     static void Main(string[] args)
     {
@@ -21,6 +23,8 @@ class Program
                     split.LoadViewLayout();
             }
         );
+
+        GLTriangleFigure? joinFig = null;
 
         w.GLModel.BuildModel = (glCtl, isInitial) =>
         {
@@ -73,11 +77,21 @@ class Program
             var railFig = new GLPointFigure(railPts).SetColor(Color.Yellow);
             glModel.AddFigure(railFig);
 
-            var joinFig = sweepNurb.NurbToGL(Color.Red, N: 10);
-            glModel.AddFigure(new GLTriangleFigure(joinFig));
+            joinFig = sweepNurb.NurbToGL(Color.Red, N: 10).ToFigure();
+            glModel.AddFigure(joinFig);
 
             // glCtl.CameraView(CameraViewType.Top);
             // glCtl.LoadView();
+        };
+
+        w.KeyDown += (sender, e) =>
+        {
+            if (e.Key == Key.Space)
+            {
+                if (joinFig is not null) joinFig.Visible = !joinFig.Visible;
+                
+                w.Invalidate();
+            }
         };
 
         w.ShowSync();
