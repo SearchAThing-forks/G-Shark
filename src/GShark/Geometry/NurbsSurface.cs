@@ -276,10 +276,24 @@ namespace GShark.Geometry
             List<Plane> frames = rail.PerpendicularFrames(tValues);
             List<NurbsBase> curves = new List<NurbsBase> {profile};
 
+            void DebugFrame(Plane frame)
+            {
+                var cs = MakeCS(
+                    frame.Origin.ToVector3(),
+                    frame.XAxis.ToVector3(),
+                    frame.YAxis.ToVector3(),
+                    frame.ZAxis.ToVector3());
+
+                Debug.GLModel.AddFigure(MakeCSFigure(cs));
+            }
+
+            DebugFrame(frames[0]);
+
             for (int i = 1; i < frames.Count; i++)
             {
                 var xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
                 curves.Add(((NurbsCurve)curves[0]).Transform(xForm));
+                DebugFrame(frames[i]);
             }
 
             return FromLoft(curves);
