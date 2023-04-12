@@ -32,9 +32,9 @@ class Program
 
             var glModel = glCtl.GLModel;
 
-            const int RAIL_DIV = 8;
-            const int TUBE_DIV = RAIL_DIV;
-            const int RAIL_PTS = 4;        
+            const int JOINT_DIV = 8;
+            const int TUBE_DIV = JOINT_DIV;
+            const int RAIL_DIVS = 40;
 
             GShark.Debug.GLModel = glModel;
 
@@ -46,7 +46,7 @@ class Program
                 baseCS: (WCS * Matrix4x4.CreateRotationX((float)(PI / 2)) * Matrix4x4.CreateRotationZ(-(float)(PI / 4)))
                     .Move(-1f, -1f, 0),
                 baseRadius: 1, topRadius: 1, height: 6,
-                bottomCap: false, topCap: false).Figure(RAIL_DIV);
+                bottomCap: false, topCap: false).Figure(JOINT_DIV);
 
             var tube2 = tube1.Mirror(YZCS)!;
 
@@ -65,13 +65,16 @@ class Program
 
             var railPts = new List<Vector3>();
             {
-                var N = RAIL_PTS;
+                var N = RAIL_DIVS;
                 var alpha = 0f;
                 var alphaStep = (float)(PI / 2 / N);
                 var rotCenter = new Vector3(0, -2f, 0);
                 for (int i = 0; i < N + 1; ++i)
-                {
+                {                    
                     railPts.Add(Vector3.Transform(profileCenter, Matrix4x4.CreateRotationZ(-alpha, rotCenter)));
+                    // if (i == 0)
+                    //     railPts.Add(Vector3.Transform(profileCenter, Matrix4x4.CreateRotationZ(-alpha - alphaStep/2f, rotCenter)));
+
                     alpha += alphaStep;
                 }
             }

@@ -619,11 +619,8 @@ namespace GShark.Geometry
         /// <returns>A collection of planes.</returns>
         public List<Plane> PerpendicularFrames(List<double> uValues)
         {
-            var pointsOnCurve = uValues.Select(PointAt).ToList(); //get points at t values
-            var pointsOnCurveTan = uValues
-                .Select(t => Evaluate.Curve.RationalDerivatives(this, t, 1)[1])
-                .Select(t => t / t.Length) // normalize
-                .ToList(); //get tangents at t values
+            var pointsOnCurve = uValues.Select(PointAt).ToList(); //get points at t values            
+            var pointsOnCurveTan = uValues.Select(t => Evaluate.Curve.RationalDerivatives(this, t, 1)[1]).ToList(); //get tangents at t values
             var firstParameter = uValues[0]; //get first t value
 
             //Create initial frame at first parameter
@@ -662,7 +659,7 @@ namespace GShark.Geometry
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane { Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext };
+                var frameNext = new Plane(pointsOnCurve[i + 1], rNext, sNext);
                 perpFrames[i + 1] = frameNext; //output frame
             }
 
