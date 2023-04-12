@@ -43,11 +43,6 @@ global using SearchAThing.OpenGL.Core;
 global using static SearchAThing.OpenGL.Core.Toolkit;
 global using static SearchAThing.OpenGL.Core.Constants;
 
-// render
-global using SearchAThing.OpenGL.Render;
-global using static SearchAThing.OpenGL.Render.Constants;
-global using static SearchAThing.OpenGL.Render.Toolkit;
-
 // gui
 global using SearchAThing.OpenGL.GUI;
 global using static SearchAThing.OpenGL.GUI.Toolkit;
@@ -57,3 +52,7 @@ global using static SearchAThing.OpenGL.GUI.Constants;
 global using SearchAThing.OpenGL.Shapes;
 global using static SearchAThing.OpenGL.Shapes.Toolkit;
 global using static SearchAThing.OpenGL.Shapes.Constants;
+
+// nurbs
+global using SearchAThing.OpenGL.Nurbs;
+global using static SearchAThing.OpenGL.Nurbs.Toolkit;
