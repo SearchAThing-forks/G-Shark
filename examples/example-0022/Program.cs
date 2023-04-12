@@ -10,7 +10,7 @@ namespace example;
 // TODO: doc
 
 class Program
-{    
+{
 
     static void Main(string[] args)
     {
@@ -32,6 +32,12 @@ class Program
 
             var glModel = glCtl.GLModel;
 
+            const int RAIL_DIV = 8;
+            const int TUBE_DIV = RAIL_DIV;
+            const int RAIL_PTS = 4;        
+
+            GShark.Debug.GLModel = glModel;
+
             glModel.Clear();
 
             glModel.AddFigure(MakeWCSFigure());
@@ -40,7 +46,7 @@ class Program
                 baseCS: (WCS * Matrix4x4.CreateRotationX((float)(PI / 2)) * Matrix4x4.CreateRotationZ(-(float)(PI / 4)))
                     .Move(-1f, -1f, 0),
                 baseRadius: 1, topRadius: 1, height: 6,
-                bottomCap: false, topCap: false).Figure();
+                bottomCap: false, topCap: false).Figure(RAIL_DIV);
 
             var tube2 = tube1.Mirror(YZCS)!;
 
@@ -52,14 +58,14 @@ class Program
             // grab tube vertexes near join as profile to sweep
 
             var profilePts = tube1.Vertexes().Where(r => r.Position.Length() < 2).Select(w => w.Position).ToList();
-            var profileCenter = profilePts[0];
-            // var profileCenter = profilePts.Mean();
+            // var profileCenter = profilePts[0];
+            var profileCenter = profilePts.Mean();
 
             glModel.AddFigure(new GLPointFigure(profilePts).SetColor(Color.Green));
 
             var railPts = new List<Vector3>();
             {
-                var N = 10;
+                var N = RAIL_PTS;
                 var alpha = 0f;
                 var alphaStep = (float)(PI / 2 / N);
                 var rotCenter = new Vector3(0, -2f, 0);
@@ -77,7 +83,7 @@ class Program
             var railFig = new GLPointFigure(railPts).SetColor(Color.Yellow);
             glModel.AddFigure(railFig);
 
-            joinFig = sweepNurb.NurbToGL(Color.Red, N: 10).ToFigure();
+            joinFig = sweepNurb.NurbToGL(Color.Red, N: TUBE_DIV).ToFigure();
             glModel.AddFigure(joinFig);
 
             // glCtl.CameraView(CameraViewType.Top);
@@ -89,7 +95,7 @@ class Program
             if (e.Key == Key.Space)
             {
                 if (joinFig is not null) joinFig.Visible = !joinFig.Visible;
-                
+
                 w.Invalidate();
             }
         };

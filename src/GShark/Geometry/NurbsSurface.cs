@@ -274,11 +274,28 @@ namespace GShark.Geometry
         {
             var (tValues, _) = Sampling.Curve.AdaptiveSample(rail, GSharkMath.MaxTolerance);
             List<Plane> frames = rail.PerpendicularFrames(tValues);
-            List<NurbsBase> curves = new List<NurbsBase> {profile};
+            List<NurbsBase> curves = new List<NurbsBase> { profile };
+
+            {
+                var cs = MakeCS(
+                    frames[0].Origin.ToVector3(),
+                    frames[0].XAxis.ToVector3(),
+                    frames[0].YAxis.ToVector3(),
+                    frames[0].ZAxis.ToVector3());
+
+                Debug.GLModel.AddFigure(MakeCSFigure(cs));
+            }
 
             for (int i = 1; i < frames.Count; i++)
             {
-                
+                var cs = MakeCS(
+                    frames[i].Origin.ToVector3(),
+                    frames[i].XAxis.ToVector3(),
+                    frames[i].YAxis.ToVector3(),
+                    frames[i].ZAxis.ToVector3());
+
+                Debug.GLModel.AddFigure(MakeCSFigure(cs));
+
                 var xForm = Core.Transform.PlaneToPlane(frames[0], frames[i]);
                 curves.Add(((NurbsCurve)curves[0]).Transform(xForm));
             }
