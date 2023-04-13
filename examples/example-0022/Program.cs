@@ -34,7 +34,7 @@ class Program
 
             const int JOINT_DIV = 8;
             const int TUBE_DIV = JOINT_DIV;
-            const int RAIL_DIVS = 40;
+            const int RAIL_DIVS = 4;
 
             GShark.Debug.GLModel = glModel;
 
