@@ -35,9 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="netcore-opengl-core" Version="3.1.0" />
-		<PackageReference Include="netcore-opengl-gui" Version="3.1.0" />
-		<PackageReference Include="netcore-opengl-shapes" Version="3.1.0" />
+    <PackageReference Include="netcore-opengl-core" Version="3.1.1" />
+		<PackageReference Include="netcore-opengl-gui" Version="3.1.1" />
+		<PackageReference Include="netcore-opengl-shapes" Version="3.1.1" />
   </ItemGroup>
 
 </Project>

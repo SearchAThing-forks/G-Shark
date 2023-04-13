@@ -34,7 +34,7 @@ class Program
 
             const int JOINT_DIV = 8;
             const int TUBE_DIV = JOINT_DIV;
-            const int RAIL_DIVS = 4;
+            const int RAIL_DIVS = 40;
 
             GShark.Debug.GLModel = glModel;
 
@@ -44,8 +44,8 @@ class Program
 
             var tube1 = new Cone(
                 baseCS: (WCS * Matrix4x4.CreateRotationX((float)(PI / 2)) * Matrix4x4.CreateRotationZ(-(float)(PI / 4)))
-                    .Move(-1f, -1f, 0),
-                baseRadius: 1, topRadius: 1, height: 6,
+                    .Move((float)(-3 * Cos(45d.ToRad())), (float)(-3 * Sin(45d.ToRad())), 0),
+                baseRadius: 2, topRadius: 2, height: 6,
                 bottomCap: false, topCap: false).Figure(JOINT_DIV);
 
             var tube2 = tube1.Mirror(YZCS)!;
@@ -57,12 +57,21 @@ class Program
 
             // grab tube vertexes near join as profile to sweep
 
-            var profilePts = tube1
-                .BuildVertexPosDict(tol: 1e-7f)
+            var _profilePts = tube1
+                .BuildVertexPosDict(tol: 1e-5f)
                 .Select(w => w.Value.First())
-                .Where(r => r.Position.Length() < 2).Select(w => w.Position).ToList();
+                .Where(r => r.Position.Length() < 5).Select(w => new
+                {
+                    vtx = w,
+                    sig = w.PositionSignature(1e-5f),
+                    pos = w.Position
+                }).ToList();
+            var profilePts = _profilePts.Select(w => w.pos).ToList();
+
             // var profileCenter = profilePts[0];
             var profileCenter = profilePts.Mean();
+
+            profilePts.Add(profilePts[0]);
 
             glModel.AddFigure(new GLPointFigure(profilePts).SetColor(Color.Green));
 
@@ -71,7 +80,7 @@ class Program
                 var N = RAIL_DIVS;
                 var alpha = 0f;
                 var alphaStep = (float)(PI / 2 / N);
-                var rotCenter = new Vector3(0, -2f, 0);
+                var rotCenter = new Vector3(0, (float)(-3 * Sqrt(2)), 0);
                 for (int i = 0; i < N + 1; ++i)
                 {
                     railPts.Add(Vector3.Transform(profileCenter, Matrix4x4.CreateRotationZ(-alpha, rotCenter)));
@@ -88,6 +97,8 @@ class Program
                 System.Console.WriteLine($"rail [{i}]: {railPt}");
             }
 
+            System.Console.WriteLine($"profile CENTER : {profileCenter}");
+
             for (int i = 0; i < profilePts.Count; ++i)
             {
                 var profilePt = profilePts[i];
@@ -103,9 +114,6 @@ class Program
 
             joinFig = sweepNurb.NurbToGL(Color.Red, N: TUBE_DIV).ToFigure();
             glModel.AddFigure(joinFig);
-
-            // glCtl.CameraView(CameraViewType.Top);
-            // glCtl.LoadView();
         };
 
         w.KeyDown += (sender, e) =>
