@@ -270,11 +270,13 @@ namespace GShark.Geometry
         /// <param name="rail">The rail curve.</param>
         /// <param name="profile">The section curve.</param>
         /// <returns>The sweep surface.</returns>
-        public static NurbsSurface FromSweep(NurbsBase rail, NurbsBase profile)
+        public static NurbsSurface FromSweep(NurbsBase rail, NurbsBase profile,
+            Vector3? startTangent = null,
+            Vector3? endTangent = null)
         {
             var (tValues, _) = Sampling.Curve.AdaptiveSample(rail, GSharkMath.MaxTolerance);
-            List<Plane> frames = rail.PerpendicularFrames(tValues);
-            List<NurbsBase> curves = new List<NurbsBase> {profile};
+            List<Plane> frames = rail.PerpendicularFrames(tValues, startTangent, endTangent);
+            List<NurbsBase> curves = new List<NurbsBase> { profile };
 
             void DebugFrame(Plane frame)
             {

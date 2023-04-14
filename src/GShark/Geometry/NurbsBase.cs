@@ -232,7 +232,7 @@ namespace GShark.Geometry
             Minimizer min = new Minimizer(objectiveFunction);
             var lengthAtPrevious = LengthAt(t);
             var initialGuess = ParameterAtLength(lengthAtPrevious + chordLength);
-            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { initialGuess , initialGuess });
+            MinimizationResult solution = min.UnconstrainedMinimizer(new Vector { initialGuess, initialGuess });
 
             return solution.SolutionPoint[0];
         }
@@ -251,14 +251,14 @@ namespace GShark.Geometry
 
             if (chordLength >= Length)
             {
-                return new List<double>{1.0};
+                return new List<double> { 1.0 };
             }
 
             var t = 0.0;
             var length = 0.0;
             var resultParams = new List<double>();
 
-            while(length + chordLength < Length)
+            while (length + chordLength < Length)
             {
                 var parmAtChordLength = ParameterAtChordLength(t, chordLength);
                 resultParams.Add(parmAtChordLength);
@@ -617,16 +617,22 @@ namespace GShark.Geometry
         /// </summary>
         ///<param name="uValues">The curve parameter values to locate perpendicular curve frames</param>
         /// <returns>A collection of planes.</returns>
-        public List<Plane> PerpendicularFrames(List<double> uValues)
+        public List<Plane> PerpendicularFrames(List<double> uValues,
+            Vector3? startTangent = null,
+            Vector3? endTangent = null)
         {
             var pointsOnCurve = uValues.Select(PointAt).ToList(); //get points at t values
+            // Debug.GLModel.AddFigure(new GLPointFigure(
+            //     pointsOnCurve.Select(p => new GLPoint(p.ToVector3(), Color.Cyan))));
             var pointsOnCurveTan = uValues.Select(t => Evaluate.Curve.RationalDerivatives(this, t, 1)[1]).ToList(); //get tangents at t values
             var firstParameter = uValues[0]; //get first t value
 
             //Create initial frame at first parameter
             var origin = PointAt(firstParameter);
-            var crvTan = Evaluate.Curve.RationalDerivatives(this, firstParameter, 1)[1];
+            var crvTan = startTangent is not null ? startTangent.Value : Evaluate.Curve.RationalDerivatives(this, firstParameter, 1)[1];
             var crvNormal = Vector3.PerpendicularTo(crvTan);
+            // Debug.GLModel.AddFigure(new GLLineFigure(GLLine.PointV(origin.ToVector3(), crvNormal.ToVector3(), Color.Yellow)));
+            // Debug.GLModel.AddFigure(new GLLineFigure(GLLine.PointV(origin.ToVector3(), crvTan.ToVector3(), Color.Orange)));
             var yAxis = Vector3.CrossProduct(crvTan, crvNormal);
             var xAxis = Vector3.CrossProduct(yAxis, crvTan);
 
@@ -659,7 +665,11 @@ namespace GShark.Geometry
                 var sNext = Vector3.CrossProduct(pointsOnCurveTan[i + 1], rNext); //compute vector s[i+1] of next frame
 
                 //create output frame
-                var frameNext = new Plane(pointsOnCurve[i + 1], rNext, sNext);  
+                if (i == pointsOnCurve.Count - 2 && endTangent is not null)
+                {
+                    rNext = Vector3.CrossProduct(sNext, endTangent.Value);
+                }
+                var frameNext = new Plane(pointsOnCurve[i + 1], rNext, sNext);
                 // var frameNext = new Plane { Origin = pointsOnCurve[i + 1], XAxis = rNext, YAxis = sNext };              
                 perpFrames[i + 1] = frameNext; //output frame
             }

@@ -68,8 +68,16 @@ class Program
                 }).ToList();
             var profilePts = _profilePts.Select(w => w.pos).ToList();
 
+            var profilePtsMean = profilePts.Mean();
+
             // var profileCenter = profilePts[0];
-            var profileCenter = profilePts.Mean();
+            var profileCenter = profilePtsMean;
+            var profilePlane = MakeCS(profilePtsMean,
+                profilePts[JOINT_DIV / 4] - profilePtsMean,
+                profilePts[0] - profilePtsMean,
+                makeOrthonormalization: true);
+
+            Debug.WriteLine($"profilePlane START: {profilePlane.BaseZ()}");            
 
             profilePts.Add(profilePts[0]);
 
@@ -107,7 +115,9 @@ class Program
 
             var sweepNurb = NurbsSurface.FromSweep(
                 new NurbsCurve(railPts.ToPoint3().ToList(), 1),
-                new NurbsCurve(profilePts.ToPoint3().ToList(), 1));
+                new NurbsCurve(profilePts.ToPoint3().ToList(), 1),
+                startTangent: new GShark.Geometry.Vector3(0.7071068, 0.70710677, 0),
+                endTangent: new GShark.Geometry.Vector3(0.7071068, -0.70710677, 0));
 
             var railFig = new GLPointFigure(railPts).SetColor(Color.Yellow);
             glModel.AddFigure(railFig);
